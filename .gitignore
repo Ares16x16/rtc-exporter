@@ -1,0 +1,71 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test, type-checker, and coverage output
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.hypothesis/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Python packaging and build output
+build/
+dist/
+*.egg-info/
+
+# Java, Eclipse, PDE, and p2 generated output
+bin/
+target/
+*.class
+.metadata/
+.p2/
+/configuration/
+hs_err_pid*.log
+replay_pid*.log
+
+# Generated RTC exporter outputs
+rtc-export-*/
+rtc-exporter-eclipse-export-*/
+rtc-export.json
+rtc-export.md
+rtc-pending-changes.patch
+diffs/
+
+# Local recovery and manual test data
+.eclipse-recovery/
+/test/
+
+# Local credentials and signing material
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.p12
+*.pfx
+
+# Editors, temporary files, and operating systems
+.idea/
+.vscode/
+.fleet/
+*.bak
+*.orig
+*.rej
+*.swp
+*.swo
+*~
+.DS_Store
+Desktop.ini
+Thumbs.db

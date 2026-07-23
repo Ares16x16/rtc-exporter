@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension point="org.eclipse.ui.commands">
+      <command
+            id="com.example.rtc.exporter.exportPendingChanges"
+            name="Export RTC Status..."
+            description="Export RTC Pending Changes metadata and Git-style file differences"/>
+   </extension>
+   <extension point="org.eclipse.ui.handlers">
+      <handler
+            commandId="com.example.rtc.exporter.exportPendingChanges"
+            class="com.example.rtc.exporter.ExportPendingChangesHandler"/>
+   </extension>
+   <extension point="org.eclipse.ui.menus">
+      <menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar id="com.example.rtc.exporter.toolbar" label="RTC Exporter">
+            <command
+                  commandId="com.example.rtc.exporter.exportPendingChanges"
+                  icon="icons/rtc-exporter.png"
+                  label="Export RTC Status..."
+                  tooltip="Export RTC Pending Changes metadata and Git-style file differences"
+                  style="push"/>
+         </toolbar>
+      </menuContribution>
+      <menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu id="com.example.rtc.exporter.menu" label="RTC Exporter">
+            <command
+                  commandId="com.example.rtc.exporter.exportPendingChanges"
+                  icon="icons/rtc-exporter.png"
+                  label="Export Pending Changes..."
+                  style="push"/>
+         </menu>
+      </menuContribution>
+   </extension>
+</plugin>

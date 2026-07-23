@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature
+         id="io.github.ares16x16.rtc.exporter.feature"
+         url="features/io.github.ares16x16.rtc.exporter.feature_2.0.1.20260723.jar"
+         version="2.0.1.20260723">
+      <category name="rtc-exporter"/>
+   </feature>
+   <category-def
+         name="rtc-exporter"
+         label="RTC Exporter">
+      <description>
+         Export tools for IBM Engineering Workflow Management Pending Changes.
+      </description>
+   </category-def>
+</site>

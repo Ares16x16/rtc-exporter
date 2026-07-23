@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="io.github.ares16x16.rtc.exporter.feature"
+      label="RTC Exporter"
+      version="2.0.1.20260723"
+      provider-name="Ares16x16">
+
+   <description url="https://github.com/Ares16x16/rtc-exporter">
+      Exports IBM Engineering Workflow Management Pending Changes metadata
+      and Git-style file differences.
+   </description>
+
+   <copyright>
+      Copyright © 2026 Ares16x16.
+   </copyright>
+
+   <license url="https://www.eclipse.org/legal/epl-2.0/">
+      This feature is provided under the Eclipse Public License 2.0.
+      The complete license is included with this feature and is available
+      at https://www.eclipse.org/legal/epl-2.0/.
+   </license>
+
+   <plugin
+         id="com.example.rtc.exporter"
+         download-size="0"
+         install-size="0"
+         version="2.0.1.20260723"
+         unpack="false"/>
+
+</feature>
