@@ -166,7 +166,6 @@ See:
 - [Notices and IBM trademark attribution](NOTICE.md)
 - [Privacy statement](PRIVACY.md)
 - [Security policy](SECURITY.md)
-- [Eclipse Marketplace publication information](eclipse-plugin/MARKETPLACE.md)
 
 IBM, Rational, Rational Team Concert, and Engineering Workflow Management are
 trademarks or registered trademarks of International Business Machines

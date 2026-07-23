@@ -89,5 +89,3 @@ The build produces:
 The p2 publisher runs with isolated build-time configuration and workspace
 directories. The generated repository is checked to ensure that it contains
 only RTC Exporter plug-in and feature artifacts.
-
-See [MARKETPLACE.md](MARKETPLACE.md) for the publication checklist.
