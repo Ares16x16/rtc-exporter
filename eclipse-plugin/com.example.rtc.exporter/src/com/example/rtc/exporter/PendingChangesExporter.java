@@ -77,7 +77,7 @@ public final class PendingChangesExporter {
         String type = element == null ? "null" : element.getClass().getName();
         String section = classifySection(type, label, inheritedSection);
         String kind = classifyKind(type, label);
-        ExportNode node = new ExportNode(label, type, section, kind, extractProperties(element));
+        ExportNode node = new ExportNode(element, label, type, section, kind, extractProperties(element));
         result.nodeCount++;
         result.nodesBySection.put(section, result.nodesBySection.getOrDefault(section, 0) + 1);
         if (GitPatchExporter.supports(element)) {
@@ -117,6 +117,59 @@ public final class PendingChangesExporter {
             }
         }
         return node;
+    }
+
+    static ExportResult filter(ExportResult source, Set<ExportNode> selectedNodes) {
+        ExportResult filtered = new ExportResult(source.generatedAt);
+        filtered.truncated = source.truncated;
+        for (ExportNode root : source.roots) {
+            ExportNode selectedRoot = filterNode(root, selectedNodes, false, filtered);
+            if (selectedRoot != null) {
+                filtered.roots.add(selectedRoot);
+            }
+        }
+        return filtered;
+    }
+
+    private static ExportNode filterNode(
+            ExportNode source,
+            Set<ExportNode> selectedNodes,
+            boolean ancestorSelected,
+            ExportResult result) {
+        boolean selected = ancestorSelected || selectedNodes.contains(source);
+        ExportNode filtered = new ExportNode(
+                source.element, source.label, source.type, source.section, source.kind,
+                new LinkedHashMap<>(source.properties));
+        for (ExportNode child : source.children) {
+            ExportNode selectedChild = filterNode(child, selectedNodes, selected, result);
+            if (selectedChild != null) {
+                filtered.children.add(selectedChild);
+            }
+        }
+        if (!selected && filtered.children.isEmpty()) {
+            return null;
+        }
+        result.nodeCount++;
+        result.nodesBySection.put(source.section, result.nodesBySection.getOrDefault(source.section, 0) + 1);
+        if (selected && GitPatchExporter.supports(source.element)) {
+            result.patchElements.add(source.element);
+        }
+        return filtered;
+    }
+
+    static List<ExportNode> allNodes(ExportResult result) {
+        List<ExportNode> nodes = new ArrayList<>();
+        for (ExportNode root : result.roots) {
+            collectNodes(root, nodes);
+        }
+        return nodes;
+    }
+
+    private static void collectNodes(ExportNode node, List<ExportNode> result) {
+        result.add(node);
+        for (ExportNode child : node.children) {
+            collectNodes(child, result);
+        }
     }
 
     private static boolean isLoadingPlaceholder(Object element, String label) {
@@ -377,7 +430,7 @@ public final class PendingChangesExporter {
         }
     }
 
-    private static String quote(String value) {
+    static String quote(String value) {
         StringBuilder escaped = new StringBuilder(value.length() + 2).append('"');
         for (int index = 0; index < value.length(); index++) {
             char character = value.charAt(index);
@@ -434,9 +487,14 @@ public final class PendingChangesExporter {
         List<Object> getLoadingParents() {
             return new ArrayList<>(loadingParents);
         }
+
+        List<ExportNode> getRoots() {
+            return Collections.unmodifiableList(roots);
+        }
     }
 
-    private static final class ExportNode {
+    static final class ExportNode {
+        private final Object element;
         private final String label;
         private final String type;
         private final String section;
@@ -444,12 +502,27 @@ public final class PendingChangesExporter {
         private final Map<String, String> properties;
         private final List<ExportNode> children = new ArrayList<>();
 
-        private ExportNode(String label, String type, String section, String kind, Map<String, String> properties) {
+        private ExportNode(
+                Object element,
+                String label,
+                String type,
+                String section,
+                String kind,
+                Map<String, String> properties) {
+            this.element = element;
             this.label = label;
             this.type = type;
             this.section = section;
             this.kind = kind;
             this.properties = properties;
+        }
+
+        String getLabel() {
+            return label;
+        }
+
+        List<ExportNode> getChildren() {
+            return Collections.unmodifiableList(children);
         }
     }
 }

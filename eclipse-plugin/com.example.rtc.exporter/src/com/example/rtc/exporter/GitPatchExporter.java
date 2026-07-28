@@ -56,8 +56,14 @@ final class GitPatchExporter {
 
     static boolean supports(Object element) {
         return element != null
-                && (implementsInterface(element.getClass(), UNRESOLVED_ITEM_INTERFACE)
+                && (element instanceof RepositoryChange
+                        || implementsInterface(element.getClass(), UNRESOLVED_ITEM_INTERFACE)
                         || implementsInterface(element.getClass(), REMOTE_CHANGE_INTERFACE));
+    }
+
+    static RepositoryChange repositoryChange(
+            ITeamRepository repository, IChange change, String beforePath, String afterPath) {
+        return new RepositoryChange(repository, change, beforePath, afterPath);
     }
 
     static PatchSummary write(List<Object> elements, Path patchFile, IProgressMonitor monitor) throws IOException {
@@ -72,7 +78,9 @@ final class GitPatchExporter {
                 continue;
             }
             try {
-                if (implementsInterface(element.getClass(), UNRESOLVED_ITEM_INTERFACE)) {
+                if (element instanceof RepositoryChange) {
+                    appendRepositoryChange((RepositoryChange) element, patch, keys, summary, monitor);
+                } else if (implementsInterface(element.getClass(), UNRESOLVED_ITEM_INTERFACE)) {
                     appendLocalChanges(element, patch, keys, summary, monitor);
                 } else if (implementsInterface(element.getClass(), REMOTE_CHANGE_INTERFACE)) {
                     appendRemoteChange(element, patch, keys, summary, monitor);
@@ -162,6 +170,35 @@ final class GitPatchExporter {
         ITeamRepository repository = remoteRepository(element);
         ContentData before = added ? ContentData.missing() : repositoryContent(repository, change.beforeState(), monitor);
         ContentData after = deleted ? ContentData.missing() : repositoryContent(repository, change.afterState(), monitor);
+        appendCandidate(oldPath, newPath, before, after, added, deleted, patch, summary, monitor);
+    }
+
+    private static void appendRepositoryChange(
+            RepositoryChange element,
+            StringBuilder patch,
+            Set<String> keys,
+            PatchSummary summary,
+            IProgressMonitor monitor) throws Exception {
+        IChange change = element.change;
+        boolean added = change.kind() == IChange.ADD;
+        boolean deleted = change.kind() == IChange.DELETE;
+        String oldPath = element.beforePath;
+        String newPath = element.afterPath;
+        if (oldPath.isBlank()) {
+            oldPath = newPath;
+        }
+        if (newPath.isBlank()) {
+            newPath = oldPath;
+        }
+        String key = "history|" + oldPath + "|" + newPath + "|" + change.kind()
+                + "|" + text(change.beforeState()) + "|" + text(change.afterState());
+        if (!keys.add(key)) {
+            return;
+        }
+        ContentData before = added ? ContentData.missing()
+                : repositoryContent(element.repository, change.beforeState(), monitor);
+        ContentData after = deleted ? ContentData.missing()
+                : repositoryContent(element.repository, change.afterState(), monitor);
         appendCandidate(oldPath, newPath, before, after, added, deleted, patch, summary, monitor);
     }
 
@@ -586,6 +623,21 @@ final class GitPatchExporter {
     private static void checkCanceled(IProgressMonitor monitor) {
         if (monitor != null && monitor.isCanceled()) {
             throw new OperationCanceledException();
+        }
+    }
+
+    static final class RepositoryChange {
+        private final ITeamRepository repository;
+        private final IChange change;
+        private final String beforePath;
+        private final String afterPath;
+
+        private RepositoryChange(
+                ITeamRepository repository, IChange change, String beforePath, String afterPath) {
+            this.repository = repository;
+            this.change = change;
+            this.beforePath = text(beforePath);
+            this.afterPath = text(afterPath);
         }
     }
 

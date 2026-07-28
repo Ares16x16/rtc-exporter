@@ -4,8 +4,8 @@
    <extension point="org.eclipse.ui.commands">
       <command
             id="com.example.rtc.exporter.exportPendingChanges"
-            name="Export RTC Status..."
-            description="Export RTC Pending Changes metadata and Git-style file differences"/>
+            name="Export RTC..."
+            description="Select and export RTC Pending Changes or loaded history with Git-style file differences"/>
    </extension>
    <extension point="org.eclipse.ui.handlers">
       <handler
@@ -18,8 +18,8 @@
             <command
                   commandId="com.example.rtc.exporter.exportPendingChanges"
                   icon="icons/rtc-exporter.png"
-                  label="Export RTC Status..."
-                  tooltip="Export RTC Pending Changes metadata and Git-style file differences"
+                  label="Export RTC..."
+                  tooltip="Select and export RTC Pending Changes or loaded history"
                   style="push"/>
          </toolbar>
       </menuContribution>
@@ -28,7 +28,7 @@
             <command
                   commandId="com.example.rtc.exporter.exportPendingChanges"
                   icon="icons/rtc-exporter.png"
-                  label="Export Pending Changes..."
+                  label="Export RTC..."
                   style="push"/>
          </menu>
       </menuContribution>

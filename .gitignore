@@ -41,6 +41,9 @@ rtc-exporter-eclipse-export-*/
 rtc-export.json
 rtc-export.md
 rtc-pending-changes.patch
+rtc-history.json
+rtc-history.md
+rtc-history.patch
 diffs/
 
 # Local recovery and manual test data

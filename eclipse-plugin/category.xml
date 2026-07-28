@@ -2,15 +2,15 @@
 <site>
    <feature
          id="io.github.ares16x16.rtc.exporter.feature"
-         url="features/io.github.ares16x16.rtc.exporter.feature_2.0.1.20260723.jar"
-         version="2.0.1.20260723">
+         url="features/io.github.ares16x16.rtc.exporter.feature_3.0.0.20260728.jar"
+         version="3.0.0.20260728">
       <category name="rtc-exporter"/>
    </feature>
    <category-def
          name="rtc-exporter"
          label="RTC Exporter">
       <description>
-         Export tools for IBM Engineering Workflow Management Pending Changes.
+         Select and export IBM Engineering Workflow Management Pending Changes or loaded history.
       </description>
    </category-def>
 </site>

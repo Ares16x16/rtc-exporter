@@ -27,18 +27,25 @@ feature. It does not mirror or redistribute IBM or Eclipse bundles.
 ### Dropins package
 
 1. Close Eclipse.
-2. Extract `rtc-exporter-dropins-2.0.1.20260723.zip` into the Eclipse installation directory.
+2. Extract `rtc-exporter-dropins-3.0.0.20260728.zip` into the Eclipse installation directory.
 3. Confirm this file exists:
 
-   `dropins/rtc-exporter/plugins/com.example.rtc.exporter_2.0.1.20260723.jar`
+   `dropins/rtc-exporter/plugins/com.example.rtc.exporter_3.0.0.20260728.jar`
 
 4. Start Eclipse once with `eclipse.exe -clean`.
 
-After Eclipse starts, open or refresh **Pending Changes**, then use **Export RTC Status...** on the main toolbar or **RTC Exporter → Export Pending Changes...** from the top menu.
+After Eclipse starts, click **Export RTC...** on the main toolbar or use **RTC Exporter → Export RTC...** from the top menu. Choose one of two modes:
 
-Version 2 also writes `rtc-pending-changes.patch` using the file states already exposed to the running RTC client. It does not launch the SCM command-line client or start a second RTC process.
+- **Pending Changes** opens a checked hierarchy. All items are selected initially; uncheck any workspace, component, change set, unresolved item, or individual file that should be omitted.
+- **History** exports completed change sets already loaded in Eclipse's EWM History view. Open **Show History** for the desired component, folder, or file first, then choose all loaded entries or particular change sets and files.
 
-When an incoming snapshot or baseline is still loading, the exporter expands it and waits up to 30 seconds for RTC to replace its `Pending...` placeholder. If RTC does not finish, the export stops with instructions instead of writing incomplete incoming data.
+Pending Changes produces `rtc-pending-changes.json`, `rtc-pending-changes.md`, and `rtc-pending-changes.patch`. History produces `rtc-history.json`, `rtc-history.md`, and `rtc-history.patch`.
+
+The History mode intentionally exports the rows currently loaded by EWM rather than using unstable internal paging services. Increase the History view count before exporting when a larger range is required.
+
+The plug-in reads file states through the authenticated EWM client. It does not launch the SCM command-line client, start a second RTC process, or modify the repository workspace.
+
+When an incoming snapshot or baseline is still loading, the exporter expands it and waits up to 30 seconds for EWM to replace its `Pending...` placeholder. If EWM does not finish, the export stops with instructions instead of writing incomplete incoming data.
 
 See the [Eclipse plug-in guide](eclipse-plugin/README.md) for complete installation, usage, uninstall, compatibility, and build instructions.
 

@@ -1,6 +1,6 @@
 # RTC Exporter for Eclipse
 
-This plug-in exports the authenticated Pending Changes model and Git-style file differences directly from the running [IBM Engineering Workflow Management](https://www.ibm.com/products/ibm-engineering-workflow-management) Eclipse client. It does not start another RTC process, request a second login, or modify the RTC sandbox.
+This plug-in exports selected Pending Changes or loaded change-set history with Git-style file differences directly from the running [IBM Engineering Workflow Management](https://www.ibm.com/products/ibm-engineering-workflow-management) Eclipse client. It does not start another RTC process, request a second login, or modify the RTC sandbox.
 
 RTC Exporter is independent from IBM. The plug-in and its p2 repository do not
 contain IBM software.
@@ -21,7 +21,7 @@ The public p2 repository is the preferred installation method:
 3. Review the license and requested dependencies, then complete the installation.
 4. Restart Eclipse when prompted.
 
-For local testing, extract `rtc-exporter-p2-2.0.1.20260723.zip` and add the
+For local testing, extract `rtc-exporter-p2-3.0.0.20260728.zip` and add the
 extracted directory as a local software site.
 
 The repository contains only:
@@ -34,9 +34,9 @@ It does not contain IBM or Eclipse bundles.
 ## Install with dropins
 
 1. Close Eclipse.
-2. Extract `rtc-exporter-dropins-2.0.1.20260723.zip` into the Eclipse installation directory. The archive creates:
+2. Extract `rtc-exporter-dropins-3.0.0.20260728.zip` into the Eclipse installation directory. The archive creates:
 
-   `dropins/rtc-exporter/plugins/com.example.rtc.exporter_2.0.1.20260723.jar`
+   `dropins/rtc-exporter/plugins/com.example.rtc.exporter_3.0.0.20260728.jar`
 
 3. Start Eclipse once with `eclipse.exe -clean`.
 
@@ -50,28 +50,50 @@ Close Eclipse, remove `dropins/rtc-exporter`, then start Eclipse once with `ecli
 
 ## Use
 
-1. Open or refresh **Pending Changes**.
-2. Click the **Export RTC Status...** toolbar button, or use **RTC Exporter → Export Pending Changes…**.
-3. Choose a directory outside the RTC sandbox.
+Click **Export RTC...** on the main toolbar, or use **RTC Exporter → Export RTC...**. The first dialog chooses the source.
 
-The plug-in creates a timestamped folder containing:
+### Pending Changes
+
+1. Open or refresh **Pending Changes**.
+2. Choose **Pending Changes** in RTC Exporter.
+3. In the checked hierarchy, leave all items selected or uncheck any workspace, component, change set, unresolved item, or individual file to omit.
+4. Choose a directory outside the RTC sandbox.
+
+The timestamped export folder contains:
 
 - `rtc-pending-changes.json`
 - `rtc-pending-changes.md`
 - `rtc-pending-changes.patch`
 
-The export preserves the Pending Changes hierarchy and captures local unresolved, conflict, outgoing, incoming, suspended, workspace, component, change-set, work-item, and changed-item nodes available in the view. It also records safe scalar model properties such as path, comment, state, identifiers, and completion flags when the installed RTC model exposes them.
+The JSON and Markdown retain the selected hierarchy. The patch contains only selected file nodes, including local unresolved files and incoming/outgoing changes when EWM exposes both file states. Checking a parent includes all descendants.
 
-If an incoming snapshot or baseline contains RTC's temporary `Pending...` child, the plug-in expands that node and waits up to 30 seconds for the real children. It stops with an actionable error if RTC does not finish, rather than exporting the placeholder as an incoming change.
+If an incoming snapshot or baseline contains EWM's temporary `Pending...` child, the plug-in expands that node and waits up to 30 seconds for the real children. It stops with an actionable error if EWM does not finish.
 
-The patch contains unified text differences for local unresolved files and incoming/outgoing file changes when RTC exposes both file states. Binary files are identified without embedding their contents. Files larger than 1 MB per side, text files over 100,000 lines, and changes that would push the combined patch over 5 MB are skipped and explained in the JSON and Markdown summaries. Because patches can contain source code or secrets, review the export before sharing it.
+### History
+
+1. In Eclipse, select the desired EWM component, folder, or file and choose **Show History**.
+2. Refresh the History view and set its entry count to the range you need.
+3. Run **Export RTC...** and choose **History**.
+4. Select all currently loaded change sets or only particular entries.
+5. Uncheck any files that should not be exported, then choose a directory outside the RTC sandbox.
+
+The timestamped export folder contains:
+
+- `rtc-history.json`
+- `rtc-history.md`
+- `rtc-history.patch`
+
+History export reads completed change sets and their before/after repository file states from the authenticated EWM client. “All” means all rows currently loaded in the EWM History view; the plug-in does not call unstable internal server-paging services. Baseline-only rows without a change set are not offered.
+
+### Diff limits
+
+Binary files are identified without embedding their contents. Files larger than 1 MB per side, text files over 100,000 lines, and changes that would push one export patch over 5 MB are skipped and explained in the JSON and Markdown summaries. Patches can contain source code or secrets, so review the export before sharing it.
 
 ## Compatibility
 
-This build targets EWM 7.1 with a Java 17-compatible Eclipse runtime. The integration uses the public `LocalWorkspaceChangesView#getActiveViewer()` entry point, public RTC file/content APIs, and reflection only for version-dependent Pending Changes model interfaces.
+This build targets EWM 7.1 with a Java 17-compatible Eclipse runtime. The integration uses `LocalWorkspaceChangesView#getActiveViewer()`, the public Eclipse History page, EWM history-entry/change-set and file/content interfaces, and reflection only for version-dependent Pending Changes model interfaces.
 
-Because those version-dependent model interfaces are not stable public API,
-test each new EWM client release before declaring it supported.
+Because the Pending Changes model and some EWM history context types are version-dependent, test each new EWM client release before declaring it supported.
 
 ## Rebuild
 
