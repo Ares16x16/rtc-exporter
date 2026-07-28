@@ -3,13 +3,41 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>RTC Exporter Update Site</title>
+  <meta name="description" content="RTC Exporter Eclipse update site for IBM Engineering Workflow Management.">
+  <title>RTC Exporter</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+    body { max-width: 760px; margin: 0 auto; padding: 56px 24px; line-height: 1.6; }
+    h1 { margin-bottom: 0; font-size: 2.5rem; }
+    .version { margin-top: 0; color: #68707a; }
+    .install { padding: 16px; border: 1px solid #8a8f98; border-radius: 8px; overflow-wrap: anywhere; }
+    code { font-size: 0.95rem; }
+    a { color: #0969da; }
+    @media (prefers-color-scheme: dark) { a { color: #58a6ff; } .version { color: #9da7b3; } }
+  </style>
 </head>
 <body>
-  <h1>RTC Exporter Update Site</h1>
-  <p>Use this URL in Eclipse under <strong>Help → Install New Software</strong>:</p>
-  <p><code>https://ares16x16.github.io/rtc-exporter/p2/</code></p>
-  <p><a href="https://github.com/Ares16x16/rtc-exporter">Source and documentation</a></p>
-  <p><a href="https://github.com/Ares16x16/rtc-exporter/releases/latest">Latest release downloads</a></p>
+  <main>
+    <h1>RTC Exporter</h1>
+    <p class="version">Version 3.0.0 · Eclipse update site</p>
+    <p>Export selected IBM Engineering Workflow Management Pending Changes or loaded change-set history as JSON, Markdown, and Git-style unified patches.</p>
+
+    <h2>Install</h2>
+    <p>In Eclipse, open <strong>Help → Install New Software…</strong>, add this repository, then select <strong>RTC Exporter</strong>:</p>
+    <p class="install"><code>https://ares16x16.github.io/rtc-exporter/p2/</code></p>
+
+    <h2>Version 3 features</h2>
+    <ul>
+      <li>Select change sets, unresolved changes, or individual files before exporting.</li>
+      <li>Export all loaded History entries or particular completed change sets and files.</li>
+      <li>Generate bounded text diffs while identifying binary and oversized changes safely.</li>
+    </ul>
+
+    <h2>Requirements</h2>
+    <p>Install and configure the official IBM Engineering Workflow Management Eclipse client first. RTC Exporter requires a Java 17-compatible Eclipse runtime.</p>
+
+    <p><a href="https://github.com/Ares16x16/rtc-exporter">Source, documentation, and usage</a></p>
+    <p>RTC Exporter is an independent open-source project and is not affiliated with, sponsored by, or endorsed by IBM.</p>
+  </main>
 </body>
 </html>
