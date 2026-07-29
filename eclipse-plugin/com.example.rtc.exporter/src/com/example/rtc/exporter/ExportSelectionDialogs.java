@@ -38,7 +38,7 @@ final class ExportSelectionDialogs {
         dialog.setInput(source);
         dialog.setExpandedElements(source.getRoots().toArray());
         dialog.setInitialElementSelections(PendingChangesExporter.allNodes(source));
-        dialog.setSize(760, 520);
+        dialog.setSize(640, 420);
         if (dialog.open() != Window.OK) {
             return null;
         }
@@ -69,7 +69,9 @@ final class ExportSelectionDialogs {
                                 : String.valueOf(element);
                     }
                 },
-                "Select all loaded history entries or only the change sets to export.");
+                "Only entries already loaded in Eclipse's EWM History view are listed. "
+                        + "To load another scope, cancel, select the component, folder, or file, "
+                        + "open its History tab, wait for it to load, then try again.");
         dialog.setTitle("Select RTC History Change Sets");
         dialog.setInitialElementSelections(entries);
         if (dialog.open() != Window.OK) {

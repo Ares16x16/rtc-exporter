@@ -2,7 +2,7 @@
 <feature
       id="io.github.ares16x16.rtc.exporter.feature"
       label="RTC Exporter"
-      version="3.0.0.20260728"
+      version="3.0.1.20260729"
       provider-name="Ares16x16">
 
    <description url="https://github.com/Ares16x16/rtc-exporter">
@@ -24,7 +24,7 @@
          id="com.example.rtc.exporter"
          download-size="0"
          install-size="0"
-         version="3.0.0.20260728"
+         version="3.0.1.20260729"
          unpack="false"/>
 
 </feature>

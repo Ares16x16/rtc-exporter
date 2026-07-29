@@ -67,7 +67,9 @@ public final class ExportPendingChangesHandler extends AbstractHandler {
                 shell,
                 "RTC Exporter",
                 null,
-                "Choose what to export. History uses the change sets currently loaded in Eclipse's History view.",
+                "Choose what to export.\n\n"
+                        + "History lists only change sets already loaded in Eclipse's EWM History view. "
+                        + "Open the component, folder, or file's History tab and wait for it to load first.",
                 MessageDialog.QUESTION,
                 new String[] {"Pending Changes", "History", "Cancel"},
                 0).open();
@@ -294,7 +296,9 @@ public final class ExportPendingChangesHandler extends AbstractHandler {
             MessageDialog.openInformation(
                     shell,
                     "RTC Exporter",
-                    "No EWM change sets are currently loaded in the History view. Refresh that view and try again.");
+                    "No EWM change sets are currently loaded in the History view. "
+                            + "Select a component, folder, or file, open its History tab, "
+                            + "wait for the entries to load, then try again.");
             return null;
         }
         return entries;
