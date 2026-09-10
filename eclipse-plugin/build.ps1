@@ -4,6 +4,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$EclipseHome = (Resolve-Path -LiteralPath $EclipseHome).Path
 $projectRoot = (Resolve-Path -LiteralPath $PSScriptRoot).Path
 $repositoryRoot = (Resolve-Path -LiteralPath (Join-Path $projectRoot "..")).Path
 $pluginProject = Join-Path $projectRoot "com.example.rtc.exporter"
@@ -43,8 +44,19 @@ $classPathEntries = New-Object System.Collections.Generic.List[string]
 foreach ($line in Get-Content -LiteralPath $bundleInfo) {
     if ($line.StartsWith("#")) { continue }
     $match = [regex]::Match($line, "file:/([^,]+)")
-    if (-not $match.Success) { continue }
-    $bundlePath = [Uri]::UnescapeDataString($match.Groups[1].Value) -replace "/", "\"
+    if ($match.Success) {
+        $bundlePath = [Uri]::UnescapeDataString($match.Groups[1].Value)
+    } else {
+        $fields = $line -split ",", 5
+        if ($fields.Count -lt 3) { continue }
+        $bundlePath = $fields[2].Trim()
+        if ([string]::IsNullOrWhiteSpace($bundlePath)) { continue }
+    }
+    $bundlePath = $bundlePath -replace "/", "\"
+    if (-not [IO.Path]::IsPathRooted($bundlePath)) {
+        $bundlePath = Join-Path $EclipseHome $bundlePath
+    }
+    $bundlePath = [IO.Path]::GetFullPath($bundlePath)
     if (Test-Path -LiteralPath $bundlePath -PathType Leaf) {
         $classPathEntries.Add($bundlePath)
     }
