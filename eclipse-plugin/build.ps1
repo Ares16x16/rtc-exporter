@@ -1,6 +1,7 @@
 param(
     [Parameter(Mandatory = $true)]
-    [string]$EclipseHome
+    [string]$EclipseHome,
+    [string]$BundleInfoPath
 )
 
 $ErrorActionPreference = "Stop"
@@ -30,7 +31,11 @@ foreach ($generatedPath in @($buildRoot, $distRoot)) {
     }
 }
 
-$bundleInfo = Join-Path $EclipseHome "configuration\org.eclipse.equinox.simpleconfigurator\bundles.info"
+$bundleInfo = if ([string]::IsNullOrWhiteSpace($BundleInfoPath)) {
+    Join-Path $EclipseHome "configuration\org.eclipse.equinox.simpleconfigurator\bundles.info"
+} else {
+    (Resolve-Path -LiteralPath $BundleInfoPath).Path
+}
 if (-not (Test-Path -LiteralPath $bundleInfo)) {
     throw "Eclipse bundles.info was not found: $bundleInfo"
 }

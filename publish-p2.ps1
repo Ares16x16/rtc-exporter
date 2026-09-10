@@ -1,6 +1,7 @@
 param(
     [Parameter(Mandatory = $true)]
-    [string]$EclipseHome
+    [string]$EclipseHome,
+    [string]$BundleInfoPath
 )
 
 $ErrorActionPreference = "Stop"
@@ -10,7 +11,11 @@ $FeatureId = "io.github.ares16x16.rtc.exporter.feature"
 $Repo = (Resolve-Path -LiteralPath $PSScriptRoot).Path
 $BuildScript = Join-Path $Repo "eclipse-plugin\build.ps1"
 $EclipseHome = (Resolve-Path -LiteralPath $EclipseHome).Path
-$BundleInfo = Join-Path $EclipseHome "configuration\org.eclipse.equinox.simpleconfigurator\bundles.info"
+$BundleInfo = if ([string]::IsNullOrWhiteSpace($BundleInfoPath)) {
+    Join-Path $EclipseHome "configuration\org.eclipse.equinox.simpleconfigurator\bundles.info"
+} else {
+    (Resolve-Path -LiteralPath $BundleInfoPath).Path
+}
 
 function Invoke-NativeCommand {
     param(
@@ -45,12 +50,16 @@ foreach ($id in $requiredBundleIds) {
     }
 }
 
-Invoke-NativeCommand "powershell.exe" @(
+$buildArguments = @(
     "-NoProfile",
     "-ExecutionPolicy", "Bypass",
     "-File", $BuildScript,
     "-EclipseHome", $EclipseHome
 )
+if (-not [string]::IsNullOrWhiteSpace($BundleInfoPath)) {
+    $buildArguments += @("-BundleInfoPath", $BundleInfo)
+}
+Invoke-NativeCommand "powershell.exe" $buildArguments
 
 $p2Source = Join-Path $Repo "eclipse-plugin\build\p2-repository"
 $requiredP2Files = @(
