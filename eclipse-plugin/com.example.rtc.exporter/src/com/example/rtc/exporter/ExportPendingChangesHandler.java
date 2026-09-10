@@ -68,6 +68,7 @@ public final class ExportPendingChangesHandler extends AbstractHandler {
                 "RTC Exporter",
                 null,
                 "Choose what to export.\n\n"
+                        + "Pending Changes exports the complete tree currently loaded in its view. "
                         + "History lists only change sets already loaded in Eclipse's EWM History view. "
                         + "Open the component, folder, or file's History tab and wait for it to load first.",
                 MessageDialog.QUESTION,
@@ -105,24 +106,20 @@ public final class ExportPendingChangesHandler extends AbstractHandler {
             return;
         }
 
-        PendingChangesExporter.ExportResult selected =
-                ExportSelectionDialogs.choosePendingChanges(shell, resultReference.get());
-        if (selected == null) {
-            return;
-        }
+        PendingChangesExporter.ExportResult allPendingChanges = resultReference.get();
         Path output = chooseOutputDirectory(shell);
         if (output == null) {
             return;
         }
         if (!runProgress(shell, "Writing RTC Pending Changes export", monitor ->
-                PendingChangesExporter.write(selected, output, monitor))) {
+                PendingChangesExporter.write(allPendingChanges, output, monitor))) {
             return;
         }
         MessageDialog.openInformation(
                 shell,
                 "RTC Exporter Complete",
-                "Exported " + selected.getNodeCount() + " selected Pending Changes nodes and "
-                        + selected.getExportedPatchCount() + " file differences to:\n\n" + output);
+                "Exported all " + allPendingChanges.getNodeCount() + " Pending Changes nodes and "
+                        + allPendingChanges.getExportedPatchCount() + " file differences to:\n\n" + output);
     }
 
     private void exportHistory(IWorkbenchPage page, Shell shell) throws ExecutionException {

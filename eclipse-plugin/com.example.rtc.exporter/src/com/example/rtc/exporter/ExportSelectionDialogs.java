@@ -28,34 +28,6 @@ final class ExportSelectionDialogs {
     private ExportSelectionDialogs() {
     }
 
-    static PendingChangesExporter.ExportResult choosePendingChanges(
-            Shell shell, PendingChangesExporter.ExportResult source) {
-        CheckedTreeSelectionDialog dialog = new CheckedTreeSelectionDialog(
-                shell, pendingLabels(), pendingContent());
-        dialog.setTitle("Select Pending Changes to Export");
-        dialog.setMessage("Check change sets, unresolved items, or individual files. Checking a parent includes its children.");
-        dialog.setContainerMode(true);
-        dialog.setInput(source);
-        dialog.setExpandedElements(source.getRoots().toArray());
-        dialog.setInitialElementSelections(PendingChangesExporter.allNodes(source));
-        dialog.setSize(640, 420);
-        if (dialog.open() != Window.OK) {
-            return null;
-        }
-        Set<PendingChangesExporter.ExportNode> selected =
-                Collections.newSetFromMap(new IdentityHashMap<PendingChangesExporter.ExportNode, Boolean>());
-        for (Object value : dialog.getResult()) {
-            if (value instanceof PendingChangesExporter.ExportNode) {
-                selected.add((PendingChangesExporter.ExportNode) value);
-            }
-        }
-        if (selected.isEmpty()) {
-            MessageDialog.openInformation(shell, "RTC Exporter", "Select at least one Pending Changes item to export.");
-            return null;
-        }
-        return PendingChangesExporter.filter(source, selected);
-    }
-
     static List<IHistoryEntry> chooseHistoryEntries(Shell shell, List<IHistoryEntry> entries) {
         ListSelectionDialog dialog = new ListSelectionDialog(
                 shell,
@@ -111,53 +83,6 @@ final class ExportSelectionDialogs {
             return null;
         }
         return HistoryExporter.filter(source, selected);
-    }
-
-    private static ILabelProvider pendingLabels() {
-        return new LabelProvider() {
-            @Override
-            public String getText(Object element) {
-                return element instanceof PendingChangesExporter.ExportNode
-                        ? ((PendingChangesExporter.ExportNode) element).getLabel()
-                        : String.valueOf(element);
-            }
-        };
-    }
-
-    private static ITreeContentProvider pendingContent() {
-        return new ITreeContentProvider() {
-            @Override
-            public Object[] getElements(Object inputElement) {
-                return inputElement instanceof PendingChangesExporter.ExportResult
-                        ? ((PendingChangesExporter.ExportResult) inputElement).getRoots().toArray()
-                        : new Object[0];
-            }
-
-            @Override
-            public Object[] getChildren(Object parentElement) {
-                return parentElement instanceof PendingChangesExporter.ExportNode
-                        ? ((PendingChangesExporter.ExportNode) parentElement).getChildren().toArray()
-                        : new Object[0];
-            }
-
-            @Override
-            public Object getParent(Object element) {
-                return null;
-            }
-
-            @Override
-            public boolean hasChildren(Object element) {
-                return getChildren(element).length > 0;
-            }
-
-            @Override
-            public void dispose() {
-            }
-
-            @Override
-            public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-            }
-        };
     }
 
     private static ILabelProvider historyLabels() {

@@ -27,16 +27,16 @@ feature. It does not mirror or redistribute IBM or Eclipse bundles.
 ### Dropins package
 
 1. Close Eclipse.
-2. Extract `rtc-exporter-dropins-3.0.0.20260728.zip` into the Eclipse installation directory.
+2. Extract `rtc-exporter-dropins-3.0.2.20260910.zip` into the Eclipse installation directory.
 3. Confirm this file exists:
 
-   `dropins/rtc-exporter/plugins/com.example.rtc.exporter_3.0.0.20260728.jar`
+   `dropins/rtc-exporter/plugins/com.example.rtc.exporter_3.0.2.20260910.jar`
 
 4. Start Eclipse once with `eclipse.exe -clean`.
 
 After Eclipse starts, click **Export RTC...** on the main toolbar or use **RTC Exporter → Export RTC...** from the top menu. Choose one of two modes:
 
-- **Pending Changes** opens a checked hierarchy. All items are selected initially; uncheck any workspace, component, change set, unresolved item, or individual file that should be omitted.
+- **Pending Changes** exports the complete hierarchy currently loaded in the Pending Changes view, regardless of the item selected in Eclipse.
 - **History** exports completed change sets already loaded in Eclipse's EWM History view. Open **Show History** for the desired component, folder, or file first, then choose all loaded entries or particular change sets and files.
 
 Pending Changes produces `rtc-pending-changes.json`, `rtc-pending-changes.md`, and `rtc-pending-changes.patch`. History produces `rtc-history.json`, `rtc-history.md`, and `rtc-history.patch`.

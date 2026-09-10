@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: RTC Exporter
 Bundle-SymbolicName: com.example.rtc.exporter;singleton:=true
-Bundle-Version: 3.0.1.20260729
+Bundle-Version: 3.0.2.20260910
 Bundle-Vendor: Ares16x16
 Bundle-DocURL: https://github.com/Ares16x16/rtc-exporter
 Bundle-License: https://www.eclipse.org/legal/epl-2.0/

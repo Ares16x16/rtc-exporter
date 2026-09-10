@@ -119,59 +119,6 @@ public final class PendingChangesExporter {
         return node;
     }
 
-    static ExportResult filter(ExportResult source, Set<ExportNode> selectedNodes) {
-        ExportResult filtered = new ExportResult(source.generatedAt);
-        filtered.truncated = source.truncated;
-        for (ExportNode root : source.roots) {
-            ExportNode selectedRoot = filterNode(root, selectedNodes, false, filtered);
-            if (selectedRoot != null) {
-                filtered.roots.add(selectedRoot);
-            }
-        }
-        return filtered;
-    }
-
-    private static ExportNode filterNode(
-            ExportNode source,
-            Set<ExportNode> selectedNodes,
-            boolean ancestorSelected,
-            ExportResult result) {
-        boolean selected = ancestorSelected || selectedNodes.contains(source);
-        ExportNode filtered = new ExportNode(
-                source.element, source.label, source.type, source.section, source.kind,
-                new LinkedHashMap<>(source.properties));
-        for (ExportNode child : source.children) {
-            ExportNode selectedChild = filterNode(child, selectedNodes, selected, result);
-            if (selectedChild != null) {
-                filtered.children.add(selectedChild);
-            }
-        }
-        if (!selected && filtered.children.isEmpty()) {
-            return null;
-        }
-        result.nodeCount++;
-        result.nodesBySection.put(source.section, result.nodesBySection.getOrDefault(source.section, 0) + 1);
-        if (selected && GitPatchExporter.supports(source.element)) {
-            result.patchElements.add(source.element);
-        }
-        return filtered;
-    }
-
-    static List<ExportNode> allNodes(ExportResult result) {
-        List<ExportNode> nodes = new ArrayList<>();
-        for (ExportNode root : result.roots) {
-            collectNodes(root, nodes);
-        }
-        return nodes;
-    }
-
-    private static void collectNodes(ExportNode node, List<ExportNode> result) {
-        result.add(node);
-        for (ExportNode child : node.children) {
-            collectNodes(child, result);
-        }
-    }
-
     private static boolean isLoadingPlaceholder(Object element, String label) {
         if (!(element instanceof String)) {
             return false;

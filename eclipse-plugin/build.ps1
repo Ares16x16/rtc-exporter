@@ -15,7 +15,7 @@ $siteInput = Join-Path $buildRoot "p2-input"
 $p2Repository = Join-Path $buildRoot "p2-repository"
 $publisherConfiguration = Join-Path $buildRoot "p2-publisher-configuration"
 $publisherWorkspace = Join-Path $buildRoot "p2-publisher-workspace"
-$pluginVersion = "3.0.1.20260729"
+$pluginVersion = "3.0.2.20260910"
 $pluginId = "com.example.rtc.exporter"
 $featureId = "io.github.ares16x16.rtc.exporter.feature"
 

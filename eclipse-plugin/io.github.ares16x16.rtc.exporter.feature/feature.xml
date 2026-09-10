@@ -2,12 +2,12 @@
 <feature
       id="io.github.ares16x16.rtc.exporter.feature"
       label="RTC Exporter"
-      version="3.0.1.20260729"
+      version="3.0.2.20260910"
       provider-name="Ares16x16">
 
    <description url="https://github.com/Ares16x16/rtc-exporter">
-      Lets users select and export IBM Engineering Workflow Management Pending Changes
-      or loaded history with Git-style file differences.
+      Lets users export all IBM Engineering Workflow Management Pending Changes
+      or selected loaded history with Git-style file differences.
    </description>
 
    <copyright>
@@ -24,7 +24,7 @@
          id="com.example.rtc.exporter"
          download-size="0"
          install-size="0"
-         version="3.0.1.20260729"
+         version="3.0.2.20260910"
          unpack="false"/>
 
 </feature>
